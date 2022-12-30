@@ -1,6 +1,8 @@
 #include<iostream>
 #include"queue.h"
+#include"car.h"
 #include"string"
+
 using namespace std;
 
 //=========================== Overloaded Constructor ===============================//
@@ -11,7 +13,7 @@ queue::queue(int size)
     rear = -1;
     NumberOfCars = 0;
     maxSize = size;
-    garage = new string[size];
+    garage = new car[size];
 }
 
 //========================== Check Queue is Empty or not ============================//
@@ -30,80 +32,111 @@ bool queue::garageIsFull()
 
 //===================== Enter Cars in Queue (enQueue Function) =======================//
 
-void queue::enQueue(string newCar) 
+void queue::enQueue(string carId, string carOnwer, int hour, int mints)
 {
-    if(garageIsFull()){
-        cout<<"Sorry,The garage is full"<<endl;
+    if (garageIsFull()) {
+        cout << "Sorry,The garage is full" << endl;
     }
-    else{
-        rear = (rear+1)%maxSize;
-        garage[rear] = newCar;
+    else {
+        rear = (rear + 1) % maxSize;
+        garage[rear].setCarId(carId);
+        garage[rear].setOwnerName(carOnwer);
+        garage[rear].setHour(hour);
+        garage[rear].setMints(mints);
         NumberOfCars++;
     }
 }
 
 //================= Exit & Remove Cars From Queue (enQueue Function) ================//
 
-void queue::deQueue(string &car)  
+void queue::deQueue(string &carId, string &carOnwer, int &hours, int &mints)
 {
-    if(garageIsEmpty()){
-        cout<<"The garage is already empty"<<endl;
+    if (garageIsEmpty()) {
+        cout << "The garage is already empty" << endl;
     }
-    else{
-     	car = garage[front];
-		front = (front+1)%maxSize;
-		NumberOfCars--;   
+    else {
+        carId = garage[front].getCarId();
+        carOnwer = garage[front].getOwnerName();
+        hours = garage[front].getHour();
+        mints = garage[front].getMints();
+        front = (front + 1) % maxSize;
+        NumberOfCars--;
     }
 }
 
-//template<class T> void queue<T>::CarLeave(int pos) //dequeue with position
-//{
-//    if(garageIsEmpty())
-//    {
-//        cout<<"The garage is already empty"<<endl;
-//    }
-//    else
-//    {
-//        for (int i = pos-1; i < garageSpace; i++)
-//        {
-//            garage[i]=garage[i+1];
-//        }
-//        carNo--;
-//    }
-//}
-
 //================================ Print upComing Car ============================//
 
-string queue::nextCar() 
+void queue::nextCar()
 {
-    return garage[front];
+    if (garageIsEmpty()){
+        cout << "No Car enter yet!";
+    }
+    else{
+    	garage[front].displayCar();
+    }
 }
 
 //============================== Number Of Current Cars ==========================//
 
 void queue::sizeQueue()
 {
-    if(garageIsFull())
+    if (garageIsFull())
     {
-        cout<<"Your garage is full"<<endl;
+        cout << "Your garage is full" << endl;
+        cout << "Number Of Cars: " << NumberOfCars << endl;
     }
-    else if(garageIsEmpty())
+    else if (garageIsEmpty())
     {
-    	cout<<"Your garage is empty"<<endl;
-    }else {
-    	cout<<"Number Of Cars: "<<NumberOfCars<<endl;
-	}
-} 
+        cout << "Your garage is empty" << endl;
+    }
+    else {
+        cout << "Number Of Cars: " << NumberOfCars << endl;
+    }
+}
 
 //================================== Return front ===========================//
 
-int queue::getFront(){
-	return front;
+int queue::getFront() {
+    return front;
 }
 
 //================================== Return Rear ===========================//
 
-int queue::getRear(){
-	return rear;
+int queue::getRear() {
+    return rear;
 }
 
+//================================== Return size ===========================//
+
+int queue::length()
+{
+    return NumberOfCars;
+}
+
+//======================= Display all car in garage =======================//
+
+void queue::printAllCar() {
+    if (garageIsEmpty())
+    {
+        cout << "The garage is empty";
+    }
+//    else
+//    {
+//        int i = 0;
+//        do
+//        {
+//            garage[i].displayCar();
+//            cout<<endl;
+//            i = (i + 1) % maxSize;
+//        } while (i != rear + 1);
+//    }
+
+    else
+    {
+    	for(int i=0 ; i<NumberOfCars ; i++){
+    		garage[i].displayCar();
+    		cout<<endl;
+		}
+	}
+    
+}
